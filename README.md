@@ -1,5 +1,7 @@
 ## Autonomous Lane Tracking
-### Edge device(Coral) steup
+### 1. Demo setup 
+* TODO
+### 2. Edge device(Coral) steup
 * Plugin the coral to Raspberry Pi usb port.
 * Power on Raspberry Pi and connect it to wifi router.
 * Connect Raspberry Pi with ssh command
