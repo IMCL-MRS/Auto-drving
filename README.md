@@ -1,5 +1,5 @@
 ## Autonomous Lane Tracking
-### Coral setup
+### Edge device(Coral) steup
 * Plugin the coral to Rasbery Pi usb port.
 * Power on Rasbery Pi and connect it to wifi router.
 * Connect Rasbery Pi with ssh command
