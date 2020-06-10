@@ -1,6 +1,11 @@
 ## Autonomous Lane Tracking
 ### 1. Demo setup 
-* TODO
+1. demo: Learning-based lane tracking: 4 robot keep lane tracking and keep the same distance.
+2. step1: collect data from reality and simulator.
+3. step2: learning-based algorithm
+* algorithm1: image + VAE + fc -> action
+* algorithm2: image + DL -> two lanes -> action
+ 
 ### 2. Edge device(Coral) steup
 * Plugin the coral to Raspberry Pi usb port.
 * Power on Raspberry Pi and connect it to wifi router.
