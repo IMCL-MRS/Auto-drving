@@ -16,3 +16,6 @@
 
 ### 3. lightspeeur spr2801s + raspberry pi
 * https://dev.gyrfalcontech.ai/get-started-with-the-sdk/
+
+### 4. Docker + ResberyPi
+* https://lemariva.com/blog/rss/edge-tpu-coral-usb-accelerator-rpi-docker
