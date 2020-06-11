@@ -4,11 +4,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from torch.autograd import Variable
 from torchvision import transforms
-#from VAE import VAE
-import glob as gb
 import sys,os
-sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
-import cv2
 # from PIL import Image as PILImage
 import random
 import matplotlib.cm as cm
@@ -48,17 +44,21 @@ class VAE(nn.Module):
         )
 
     def reparameterize(self, mu, logvar):
-        eps = Variable(torch.randn(mu.size(0), mu.size(1))).cuda()
-        z = mu + eps * torch.exp(logvar / 2)
+        #eps = Variable(torch.randn(mu.size(0), mu.size(1))).cuda()
+        eps = torch.randn(1, 128, device='cuda')
+        #z = mu + eps * torch.exp(logvar / 2)
+        z = torch.add(mu, eps * torch.exp(logvar / 2))
         return z
 
     def forward(self, x):
         out1, out2 = self.encoder(x), self.encoder(x)
 
-        mu = self.fc11(out1.view(out1.size(0), -1))
-        logvar = self.fc12(out2.view(out2.size(0), -1))
+        #mu = self.fc11(out1.view(out1.size(0), -1))
+        #logvar = self.fc12(out2.view(out2.size(0), -1))
+        mu = self.fc11(out1.view(1, -1))
+        logvar = self.fc12(out2.view(1, -1))
         z = self.reparameterize(mu, logvar)
-        out3 = self.fc2(z).view(z.size(0), 128, 30,50)
+        out3 = self.fc2(z).view(1, 128, 30,50)
         return self.decoder(out3), mu, logvar
 
 class Learner(nn.Module):
