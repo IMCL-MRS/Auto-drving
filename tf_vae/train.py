@@ -79,7 +79,7 @@ for epoch in range(args.n_epochs):
     pbar.close()
     print("Epoch {:3}/{}".format(epoch + 1, args.n_epochs))
     print("VAE: optimization step", (train_step + 1), train_loss, r_loss, kl_loss)
-    if epoch % 1 == 0:
+    if epoch % 10 == 0:
         vae_controller.vae.save_checkpoint("vae_"+str(epoch))
 
         # Update params
@@ -112,5 +112,5 @@ for epoch in range(args.n_epochs):
     os.makedirs(save_path, exist_ok=True)
     print("Saving to {}".format(save_path))
     vae_controller.set_target_params()
-    vae_controller.target_vae.save_checkpoint("target_vae_" + str(epoch))
+    # vae_controller.target_vae.save_checkpoint("target_vae_" + str(epoch))
     vae_controller.save(save_path)

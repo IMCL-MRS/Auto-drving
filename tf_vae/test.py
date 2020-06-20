@@ -9,7 +9,7 @@ import numpy as np
 from stable_baselines.common import set_global_seeds
 from PIL import Image
 
-from vae.controller import VAEController
+from controller import VAEController
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--folder', help='Log folder', type=str, default='test/')
@@ -47,7 +47,7 @@ for i in range(args.n_samples):
     encoded = vae.encode_from_raw_image(image)
     print(encoded)
     # print(encoded[encoded > 0])
-    # reconstructed_image = vae.decode(encoded)[0]
-    # cv2.imwrite("decode.jpg", reconstructed_image)
+    reconstructed_image = vae.decode(encoded)[0]
+    cv2.imwrite("decode.jpg", reconstructed_image)
     # print(reconstructed_image[reconstructed_image>0])
 

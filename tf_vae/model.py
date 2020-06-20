@@ -96,8 +96,8 @@ class ConvVAE(object):
 
             # VAE
             self.mu = tf.layers.dense(h, self.z_size, name="enc_fc_mu")
+            self.logvar = tf.layers.dense(h, self.z_size, name="enc_fc_log_var")
             if self.is_training:
-                self.logvar = tf.layers.dense(h, self.z_size, name="enc_fc_log_var")
                 self.sigma = tf.exp(self.logvar / 2.0)
                 self.epsilon = tf.random_normal([self.batch_size, self.z_size])
                 self.z = self.mu + self.sigma * self.epsilon
@@ -188,8 +188,7 @@ class ConvVAE(object):
     def set_params(self, params):
         assign_ops = []
         for param, loaded_p in zip(self.params, params):
-            if param.shape == loaded_p.shape:
-                assign_ops.append(param.assign(loaded_p))
+            assign_ops.append(param.assign(loaded_p))
         self.sess.run(assign_ops)
 
     def get_params(self):

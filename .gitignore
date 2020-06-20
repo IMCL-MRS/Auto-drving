@@ -1,2 +1,4 @@
 tf_vae/train/*
+tf_vae/test_model/*
+tf_vae/logs/*
 
