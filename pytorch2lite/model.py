@@ -44,8 +44,9 @@ class VAE(nn.Module):
         )
 
     def reparameterize(self, mu, logvar):
-        #eps = Variable(torch.randn(mu.size(0), mu.size(1))).cuda()
-        eps = torch.randn(1, 128, device='cuda')
+        eps = Variable(torch.randn(1, 128)).cuda()
+        # eps = Variable(torch.randn(mu.size(0), mu.size(1))).cuda()
+        # eps = torch.randn(1, 128, device='cuda')
         #z = mu + eps * torch.exp(logvar / 2)
         z = torch.add(mu, eps * torch.exp(logvar / 2))
         return z

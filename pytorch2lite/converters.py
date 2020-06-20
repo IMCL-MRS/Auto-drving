@@ -7,13 +7,17 @@ from onnx2keras import onnx_to_keras
 
 
 def pytorch2savedmodel(onnx_model_path, saved_model_dir):
-    onnx_model = onnx.load(onnx_model_path)
+    #onnx_model = onnx.load(onnx_model_path)
+    onnx_model = onnx.load_model(onnx_model_path)
 
     # input_names = ['input']
     input_names = ['input1','input2']
 
     # k_model = onnx_to_keras(onnx_model=onnx_model, change_ordering=True, verbose=False)
-    k_model = onnx_to_keras(onnx_model=onnx_model, input_names=input_names, change_ordering=True, verbose=False)
+    #k_model = onnx_to_keras(onnx_model=onnx_model, input_names=input_names, change_ordering=True, verbose=False)
+    print("#"*10)
+    k_model = onnx_to_keras(onnx_model, ['input1','input2'], change_ordering=False, verbose=True)
+    print("#"*10)
 
     weights = k_model.get_weights()
 
@@ -39,9 +43,9 @@ def pytorch2savedmodel(onnx_model_path, saved_model_dir):
 
 def savedmodel2tflite(saved_model_dir, tflite_model_path, quantize=False):
     saved_model_dir = str(Path(saved_model_dir).joinpath('1'))
-    converter = tf.lite.TFLiteConverter.from_saved_model(saved_model_dir)
+    converter = tf.contrib.lite.TFLiteConverter.from_saved_model(saved_model_dir)
     if quantize:
-        converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
+        converter.optimizations = [tf.contrib.lite.Optimize.OPTIMIZE_FOR_SIZE]
     tflite_model = converter.convert()
 
     with open(tflite_model_path, 'wb') as f:
