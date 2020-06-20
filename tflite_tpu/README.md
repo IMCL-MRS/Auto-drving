@@ -14,3 +14,6 @@
 ## 4. Check the output data
 * Run the TF model and tflite model respectively, and check the output data.
  * ![output data check](../figs/tflite.png)
+ 
+## 5. Reference
+* model quantization(https://github.com/PINTO0309/PINTO_model_zoo)
