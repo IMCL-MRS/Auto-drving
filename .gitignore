@@ -5,4 +5,4 @@ tf_vae/vae_*
 *.jpg
 *.png
 *__pycache__*
-
+tf_vae/encode.tflite

@@ -144,6 +144,6 @@ def func_freezepb2_tflite_int8(out_name):
 if __name__ == "__main__":
     model_path = "./test_model/vae-0"
     func_ck2_freezepb(model_path, "vae_frozen.pb")
-    func_freezepb2_tflite_int8("encode.tflite")
+    func_freezepb2_tflite_fp32("encode.tflite")
 
 

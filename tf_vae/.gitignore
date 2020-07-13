@@ -1,2 +1,4 @@
 train/*
+test_model*
+logs*
 

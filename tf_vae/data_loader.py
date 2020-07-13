@@ -11,7 +11,10 @@ from joblib import Parallel, delayed
 from config import IMAGE_WIDTH, IMAGE_HEIGHT, ROI, INPUT_DIM
 
 import numpy as np
+import random
 from PIL import ImageEnhance
+from PIL import Image
+from skimage.transform import rotate, AffineTransform, warp
 
 transform_type_dict = dict(
     brightness=ImageEnhance.Brightness, contrast=ImageEnhance.Contrast,
@@ -124,15 +127,28 @@ def preprocess_image(image, convert_to_rgb=False):
     # Normalize
     # ADDED 0712
     # _transform_dict = {'brightness': 0.1026, 'contrast': 0.0935, 'sharpness': 0.8386, 'color': 0.1592}
-    _transform_dict = {'brightness': 0.5, 'contrast': 0.3, 'sharpness': 0.8386, 'color': 0.1592}
-    _color_jitter = ColorJitter(_transform_dict)
-    # 在进行color jitter之前，必须要将numpy array转化为Image对象
-    from PIL import Image
-    im = Image.fromarray(im)
-    im = _color_jitter(im)
-    # 做完color jitter之后，再将Image对象转回numpy array
-    im = np.array(im)  # 转换完之后，这里的img是unit8类型的
-    im = cv.GaussianBlur(im, (5, 5), 0)
+    if random.choice([True, False]):
+        rand_b = random.uniform(0,0.5)
+        rand_ct = random.uniform(0,0.5)
+        rand_s = random.uniform(0,0.5)
+        rand_cl = random.uniform(0,0.2)
+        _transform_dict = {'brightness': rand_b, 'contrast': rand_ct, 'sharpness': rand_s, 'color': rand_cl}
+        _color_jitter = ColorJitter(_transform_dict)
+        # 在进行color jitter之前，必须要将numpy array转化为Image对象
+        im = Image.fromarray(im)
+        im = _color_jitter(im)
+        # 做完color jitter之后，再将Image对象转回numpy array
+        # im = np.array(im)  # 转换完之后，这里的img是unit8类型的
+
+    angle = 0
+    if random.choice([True, False]):
+        angle = random.randint(-50, 50)
+        transform = AffineTransform(translation=(angle, 0))  # (-200,0) are x and y coordinate
+        im = warp(im, transform, mode="constant") * 255.
+        # cv2.imwrite( "train_"+str(random.randint(0,100)) + str(angle) + ".png", im)
+
+    im = cv2.GaussianBlur(im, (5, 5), 0)
+    # im = np.array(im)  # 转换完之后，这里的img是unit8类型的
     im = preprocess_input(im.astype(np.float32), mode="rl")
 
     return im
