@@ -3,7 +3,7 @@ Train a VAE model using saved images in a folder
 """
 import argparse
 import os,sys
-sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
+# sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
 import cv2
 import numpy as np
 from stable_baselines.common import set_global_seeds
@@ -20,7 +20,7 @@ parser.add_argument('-f', '--folder', help='Path to a folder containing images f
 parser.add_argument('--z-size', help='Latent space', type=int, default=128)
 parser.add_argument('--seed', help='Random generator seed', type=int, default=0)
 parser.add_argument('--n-samples', help='Max number of samples', type=int, default=-1)
-parser.add_argument('--batch-size', help='Batch size', type=int, default=64)
+parser.add_argument('--batch-size', help='Batch size', type=int, default=128)
 parser.add_argument('--learning-rate', help='Learning rate', type=float, default=1e-4)
 parser.add_argument('--kl-tolerance', help='KL tolerance (to cap KL loss)', type=float, default=0.5)
 parser.add_argument('--beta', help='Weight for kl loss', type=float, default=1.0)

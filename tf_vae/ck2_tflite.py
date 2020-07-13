@@ -124,7 +124,7 @@ def freeze_pb_tflite():
     # open(path + "quantized_model.tflite", "wb").write(tflite_model)
     # print("finish!")
 
-def func_freezepb2_tflite(out_name):
+def func_freezepb2_tflite_fp32(out_name):
     # 1. encoder
     convert = tf.contrib.lite.TFLiteConverter.from_frozen_graph("vae_frozen.pb", input_arrays=["input"], output_arrays=["enc_fc_mu/BiasAdd"], input_shapes={"input": [1, 120, 200, 1]})
     # 2. decoder
@@ -132,9 +132,18 @@ def func_freezepb2_tflite(out_name):
     tflite_model = convert.convert()
     open(out_name, "wb").write(tflite_model)
 
+def func_freezepb2_tflite_int8(out_name):
+    # 1. encoder
+    converter = tf.contrib.lite.TFLiteConverter.from_frozen_graph("vae_frozen.pb", input_arrays=["input"], output_arrays=["enc_fc_mu/BiasAdd"], input_shapes={"input": [1, 120, 200, 1]})
+    converter.experimental_new_converter = True
+    converter.optimizations = [tf.contrib.lite.Optimize.DEFAULT]
+    # converter.representative_dataset = representative_dataset_gen_321
+    tflite_model = converter.convert()
+    open(out_name, "wb").write(tflite_model)
+
 if __name__ == "__main__":
     model_path = "./test_model/vae-0"
     func_ck2_freezepb(model_path, "vae_frozen.pb")
-    func_freezepb2_tflite("encode.tflite")
+    func_freezepb2_tflite_int8("encode.tflite")
 
 

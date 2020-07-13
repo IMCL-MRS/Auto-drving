@@ -10,6 +10,28 @@ from joblib import Parallel, delayed
 
 from config import IMAGE_WIDTH, IMAGE_HEIGHT, ROI, INPUT_DIM
 
+import numpy as np
+from PIL import ImageEnhance
+
+transform_type_dict = dict(
+    brightness=ImageEnhance.Brightness, contrast=ImageEnhance.Contrast,
+    sharpness=ImageEnhance.Sharpness, color=ImageEnhance.Color
+)
+
+
+class ColorJitter(object):
+    def __init__(self, transform_dict):
+        self.transforms = [(transform_type_dict[k], transform_dict[k]) for k in transform_dict]
+
+    def __call__(self, img):
+        out = img
+        rand_num = np.random.uniform(0, 1, len(self.transforms))
+
+        for i, (transformer, alpha) in enumerate(self.transforms):
+            r = alpha * (rand_num[i] * 2.0 - 1.0) + 1  # r in [1-alpha, 1+alpha)
+            out = transformer(out).enhance(r)
+
+        return out
 
 def preprocess_input(x, mode="rl"):
     """
@@ -30,6 +52,7 @@ def preprocess_input(x, mode="rl"):
     x = x.reshape(INPUT_DIM)
     # assert x.shape[-1] == 1, "Color channel must be at the end of the tensor {}".format(x.shape)
     # RL mode: divide only by 255
+
     x /= 255.
 
     if mode == "tf":
@@ -99,6 +122,17 @@ def preprocess_image(image, convert_to_rgb=False):
     # if convert_to_rgb:
     #     im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
     # Normalize
+    # ADDED 0712
+    # _transform_dict = {'brightness': 0.1026, 'contrast': 0.0935, 'sharpness': 0.8386, 'color': 0.1592}
+    _transform_dict = {'brightness': 0.5, 'contrast': 0.3, 'sharpness': 0.8386, 'color': 0.1592}
+    _color_jitter = ColorJitter(_transform_dict)
+    # 在进行color jitter之前，必须要将numpy array转化为Image对象
+    from PIL import Image
+    im = Image.fromarray(im)
+    im = _color_jitter(im)
+    # 做完color jitter之后，再将Image对象转回numpy array
+    im = np.array(im)  # 转换完之后，这里的img是unit8类型的
+    im = cv.GaussianBlur(im, (5, 5), 0)
     im = preprocess_input(im.astype(np.float32), mode="rl")
 
     return im
