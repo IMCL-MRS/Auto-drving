@@ -138,7 +138,7 @@ def preprocess_image(image, convert_to_rgb=False):
         im = Image.fromarray(im)
         im = _color_jitter(im)
         # 做完color jitter之后，再将Image对象转回numpy array
-        # im = np.array(im)  # 转换完之后，这里的img是unit8类型的
+        im = np.array(im)  # 转换完之后，这里的img是unit8类型的
 
     angle = 0
     if random.choice([True, False]):

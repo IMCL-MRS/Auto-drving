@@ -38,6 +38,7 @@ for i in range(10):
         im = Image.fromarray(im)
         im = _color_jitter(im)
         # 做完color jitter之后，再将Image对象转回numpy array
+        im = np.array(im)
     # 2. gaussian filter
     im = cv.GaussianBlur(im, (3, 3), 0)
 
