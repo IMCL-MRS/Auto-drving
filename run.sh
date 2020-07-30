@@ -1,0 +1,14 @@
+roscore&
+sleep 2s
+roslaunch autorace turtlebot3_autorace_gazebo.launch&
+sleep 10s
+export GAZEBO_MODE=true
+export AUTO_IN_CALIB=action
+roslaunch turtlebot3_autorace_camera turtlebot3_autorace_intrinsic_camera_calibration.launch&
+sleep 4s
+export AUTO_EX_CALIB=action
+roslaunch turtlebot3_autorace_camera turtlebot3_autorace_extrinsic_camera_calibration.launch&
+sleep 4s
+export AUTO_DT_CALIB=calibration
+roslaunch autorace detect_lane.launch&
+roslaunch turtlebot3_autorace_control turtlebot3_autorace_control_lane.launch&
